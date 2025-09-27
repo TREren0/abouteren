@@ -3,27 +3,178 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ana Sayfa - CV Sitesi</title>
-  <link rel="stylesheet" href="style.css">
+  <title>CV Sitesi - About Eren</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background-color: #121212;
+      color: #ffffff;
+      transition: background-color 0.3s, color 0.3s;
+      overflow-x: hidden;
+    }
+    body.light { background-color: #f7f7f7; color: #121212; }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background-color: #1e1e1e;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    body.light header { background-color: #ffffff; }
+    .logo { font-weight: 700; font-size: 1.8em; letter-spacing: 1px; }
+    nav a { margin: 0 15px; text-decoration: none; color: inherit; font-weight: 600; font-size: 1em; transition: color 0.3s; }
+    nav a:hover { color: #4CAF50; }
+    nav a.active { border-bottom: 2px solid #4CAF50; padding-bottom: 2px; }
+
+    .theme-toggle { padding: 6px 12px; font-size: 1.1em; cursor: pointer; background: none; border: 1px solid currentColor; border-radius: 6px; }
+
+    main {
+      min-height: 75vh;
+      position: relative;
+      padding: 50px 20px;
+    }
+
+    section {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-20px);
+      transition: opacity 0.6s ease, transform 0.6s ease, visibility 0s linear 0.6s;
+    }
+    section.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      transition-delay: 0s;
+    }
+
+    h1 { font-size: 2.5em; font-weight: 700; margin-bottom: 20px; }
+    p { font-size: 1.15em; line-height: 1.7; margin-bottom: 20px; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    li { font-size: 1.1em; margin: 8px 0; font-weight: 500; }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      background-color: #1e1e1e;
+      font-size: 0.9em;
+      font-weight: 600;
+    }
+    body.light footer { background-color: #f7f7f7; }
+
+    #datetime { font-family: 'Courier New', Courier, monospace; }
+
+    @media (max-width: 700px) {
+      header { flex-direction: column; gap: 12px; }
+      nav a { margin: 5px; }
+      main { padding: 30px 15px; }
+    }
+  </style>
 </head>
 <body>
   <header>
-    <div class="logo"><strong>About Eren</strong></div>
+    <div class="logo">About Eren</div>
     <nav>
-      <a href="index.html" class="active">Hakkımda</a>
-      <a href="projeler.html">Projeler</a>
-      <a href="iletisim.html">İletişim</a>
+      <a href="#" data-target="anasayfa" class="active">Hakkımda</a>
+      <a href="#" data-target="projeler">Projeler</a>
+      <a href="#" data-target="iletisim">İletişim</a>
     </nav>
     <button class="theme-toggle" id="themeBtn">🌙</button>
   </header>
 
   <main>
-    <section>
+    <section id="anasayfa" class="active">
       <h1>Hakkımda</h1>
       <p>Merhaba, ben Eren. Kişisel web siteme hoş geldiniz. Burada deneyimlerimi, projelerimi ve becerilerimi paylaşıyorum.</p>
     </section>
+
+    <section id="projeler">
+      <h1>Projelerim</h1>
+      <p>Burada aktif ve geliştirilmekte olan projelerim yer alacak. (Şimdilik örnek yazılar)</p>
+      <ul>
+        <li>Proje 1 - Kişisel Web Sitesi</li>
+        <li>Proje 2 - Lorem ipsum açıklama...</li>
+        <li>Proje 3 - Lorem ipsum açıklama...</li>
+      </ul>
+    </section>
+
+    <section id="iletisim">
+      <h1>İletişim</h1>
+      <p>E-posta: <a href="mailto:mail@ornek.com">mail@ornek.com</a></p>
+      <p>LinkedIn: <a href="#" target="_blank">linkedin.com/in/kullanici</a></p>
+      <p>Instagram: <a href="https://www.instagram.com/eren.img/" target="_blank">Instagram</a></p>
+    </section>
   </main>
 
-  <script src="theme.js"></script>
+  <footer>
+    <div id="datetime"></div>
+    <p>© 2025 About Eren. Tüm hakları saklıdır.</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Tema
+      const themeBtn = document.getElementById("themeBtn");
+      if(localStorage.getItem("theme") === "light") document.body.classList.add("light");
+      themeBtn.addEventListener("click", () => {
+        document.body.classList.toggle("light");
+        localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
+        themeBtn.textContent = document.body.classList.contains("light") ? "🌞" : "🌙";
+      });
+      themeBtn.textContent = document.body.classList.contains("light") ? "🌞" : "🌙";
+
+      // SPA geçişi
+      const sections = document.querySelectorAll("main section");
+      const links = document.querySelectorAll("nav a");
+
+      function showSection(targetId) {
+        sections.forEach(sec => {
+          if(sec.id === targetId){
+            sec.classList.add("active");
+          } else {
+            sec.classList.remove("active");
+          }
+        });
+      }
+
+      links.forEach(link => {
+        link.addEventListener("click", e => {
+          e.preventDefault();
+          const target = link.dataset.target;
+          showSection(target);
+          links.forEach(l => l.classList.remove("active"));
+          link.classList.add("active");
+        });
+      });
+
+      // Sayfa açılışı
+      showSection('anasayfa');
+
+      // Tarih/Saat
+      const datetime = document.getElementById("datetime");
+      function updateDateTime() {
+        const now = new Date();
+        datetime.textContent = now.toLocaleTimeString("tr-TR", { hour:"2-digit", minute:"2-digit", second:"2-digit" });
+      }
+      setInterval(updateDateTime, 1000);
+      updateDateTime();
+    });
+  </script>
 </body>
 </html>
